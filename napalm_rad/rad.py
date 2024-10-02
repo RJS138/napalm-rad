@@ -19,13 +19,20 @@ Napalm driver for rad.
 Read https://napalm.readthedocs.io for more information.
 """
 
+import os
+
 from napalm.base import NetworkDriver
 from napalm.base.exceptions import (
+    CommandErrorException,
     ConnectionException,
-    SessionLockedException,
     MergeConfigException,
     ReplaceConfigException,
-    CommandErrorException,
+    SessionLockedException,
+)
+from netmiko import (
+    ConnectHandler,
+    NetmikoAuthenticationException,
+    NetmikoTimeoutException,
 )
 
 
@@ -43,11 +50,28 @@ class radDriver(NetworkDriver):
         if optional_args is None:
             optional_args = {}
 
+        self.fsm_dir = os.path.abspath(
+            os.path.join(os.path.dirname(__file__), "..", "napalm_rad\\templates")
+        )
+
     def open(self):
         """Implement the NAPALM method open (mandatory)"""
-        pass
 
+        connection_args = {
+            "device_type": "autodetect",
+            "ip": self.hostname,
+            "username": self.username,
+            "password": self.password,
+            "port": 22,
+            "timeout": 20,
+        }
+
+        try:
+            self.conn = ConnectHandler(**connection_args)
+
+        except Exception:
+            self.conn = None
 
     def close(self):
         """Implement the NAPALM method close (mandatory)"""
-        pass
+        self.conn.disconnect()

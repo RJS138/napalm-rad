@@ -1,1 +1,4 @@
-napalm>=2.0.0
+napalm==5.0.0
+netmiko==4.1.2
+pytest==8.3.3
+setuptools==75.1.0

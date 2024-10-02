@@ -1,0 +1,18 @@
+Value description (.*)
+Value name (.*)
+Value location (.*)
+Value contact (.*)
+Value mac (.*)
+Value engine_time (.*)
+Value connector_side (.*)
+
+Start
+	^Description +: ${description}
+	^Name +: ${name} 
+	^Location +: ${location}
+	^Contact +: ${contact}
+	^MAC Address +: ${mac}
+	^Engine Time +: ${engine_time}
+	^Connectors Side +: ${connector_side}
+
+END
